@@ -1,0 +1,3172 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LocalStore -- Main Admin</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+body{
+  background:#f5f7fb;
+  color:#172033;
+}
+
+button,input,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+  border:0;
+}
+
+.app{
+  min-height:100vh;
+  display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:260px;
+  background:#111827;
+  color:white;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:100;
+  padding:20px 14px;
+  overflow-y:auto;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 10px 25px;
+}
+
+.logoIcon{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#2563eb;
+  font-size:22px;
+}
+
+.logoText strong{
+  display:block;
+  font-size:18px;
+}
+
+.logoText span{
+  font-size:11px;
+  color:#9ca3af;
+}
+
+.navTitle{
+  font-size:10px;
+  color:#6b7280;
+  margin:18px 12px 8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.navBtn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:#d1d5db;
+  background:transparent;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:4px;
+  text-align:left;
+}
+
+.navBtn:hover,
+.navBtn.active{
+  background:#1f2937;
+  color:white;
+}
+
+.navIcon{
+  width:24px;
+  text-align:center;
+}
+
+.sidebarBottom{
+  margin-top:30px;
+  border-top:1px solid #273244;
+  padding-top:16px;
+}
+
+.adminMini{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#374151;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+}
+
+.adminMini small{
+  color:#9ca3af;
+}
+
+/* MAIN */
+
+.main{
+  margin-left:260px;
+  width:calc(100% - 260px);
+}
+
+.topbar{
+  height:72px;
+  background:white;
+  border-bottom:1px solid #e5e7eb;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.mobileMenu{
+  display:none;
+  background:white;
+  font-size:24px;
+}
+
+.pageTitle h1{
+  font-size:21px;
+}
+
+.pageTitle p{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:3px;
+}
+
+.topActions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.iconBtn{
+  width:40px;
+  height:40px;
+  border:1px solid #e5e7eb;
+  background:white;
+  border-radius:10px;
+}
+
+.statusOnline{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 12px;
+  background:#ecfdf5;
+  color:#047857;
+  border-radius:20px;
+  font-size:12px;
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#10b981;
+}
+
+/* CONTENT */
+
+.content{
+  padding:26px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.sectionHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.sectionHead h2{
+  font-size:18px;
+}
+
+.sectionHead p{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:4px;
+}
+
+/* CARDS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:22px;
+}
+
+.stat{
+  background:white;
+  border:1px solid #e8ebf0;
+  border-radius:15px;
+  padding:18px;
+  box-shadow:0 2px 8px rgba(15,23,42,.03);
+}
+
+.statTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.statIcon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eff6ff;
+  color:#2563eb;
+  font-size:19px;
+}
+
+.statLabel{
+  color:#6b7280;
+  font-size:12px;
+}
+
+.statValue{
+  font-size:25px;
+  font-weight:800;
+  margin-top:12px;
+}
+
+.statBottom{
+  font-size:11px;
+  color:#6b7280;
+  margin-top:5px;
+}
+
+/* GRID */
+
+.grid2{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:18px;
+}
+
+.card{
+  background:white;
+  border:1px solid #e8ebf0;
+  border-radius:15px;
+  box-shadow:0 2px 8px rgba(15,23,42,.03);
+  overflow:hidden;
+}
+
+.cardHeader{
+  padding:17px 18px;
+  border-bottom:1px solid #edf0f4;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.cardHeader h3{
+  font-size:15px;
+}
+
+.cardBody{
+  padding:18px;
+}
+
+/* TABLE */
+
+.tableWrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:720px;
+}
+
+th{
+  text-align:left;
+  font-size:11px;
+  color:#6b7280;
+  background:#f9fafb;
+  padding:12px 14px;
+  white-space:nowrap;
+}
+
+td{
+  padding:13px 14px;
+  border-top:1px solid #edf0f4;
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.storeCell{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.storeAvatar{
+  width:35px;
+  height:35px;
+  border-radius:9px;
+  background:#eff6ff;
+  color:#2563eb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+}
+
+.badge{
+  display:inline-flex;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:700;
+}
+
+.badge.green{
+  background:#ecfdf5;
+  color:#047857;
+}
+
+.badge.red{
+  background:#fef2f2;
+  color:#dc2626;
+}
+
+.badge.yellow{
+  background:#fffbeb;
+  color:#b45309;
+}
+
+.badge.blue{
+  background:#eff6ff;
+  color:#2563eb;
+}
+
+.actionBtn{
+  padding:7px 10px;
+  border-radius:7px;
+  font-size:11px;
+  margin-right:4px;
+}
+
+.primary{
+  background:#2563eb;
+  color:white;
+}
+
+.success{
+  background:#059669;
+  color:white;
+}
+
+.danger{
+  background:#dc2626;
+  color:white;
+}
+
+.secondary{
+  background:#f3f4f6;
+  color:#374151;
+}
+
+/* SEARCH */
+
+.toolbar{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+  flex-wrap:wrap;
+}
+
+.search{
+  position:relative;
+  flex:1;
+  min-width:220px;
+}
+
+.search input{
+  width:100%;
+  height:42px;
+  border:1px solid #dfe3e8;
+  border-radius:10px;
+  padding:0 14px 0 38px;
+  outline:none;
+}
+
+.search span{
+  position:absolute;
+  left:13px;
+  top:11px;
+}
+
+.select{
+  height:42px;
+  border:1px solid #dfe3e8;
+  border-radius:10px;
+  padding:0 12px;
+  background:white;
+}
+
+/* REPORT */
+
+.reportGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.reportBox{
+  background:white;
+  border:1px solid #e8ebf0;
+  border-radius:15px;
+  padding:20px;
+}
+
+.reportBox small{
+  color:#6b7280;
+}
+
+.reportBox strong{
+  display:block;
+  font-size:26px;
+  margin-top:8px;
+}
+
+/* SETTINGS */
+
+.settingsGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.formGroup{
+  margin-bottom:15px;
+}
+
+.formGroup label{
+  display:block;
+  font-size:12px;
+  font-weight:600;
+  margin-bottom:7px;
+}
+
+.formGroup input,
+.formGroup select{
+  width:100%;
+  height:43px;
+  border:1px solid #dfe3e8;
+  border-radius:9px;
+  padding:0 12px;
+  outline:none;
+  background:white;
+}
+
+.formGroup input:focus{
+  border-color:#2563eb;
+}
+
+/* LOGIN */
+
+.loginScreen{
+  position:fixed;
+  inset:0;
+  background:#f5f7fb;
+  z-index:999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.loginBox{
+  width:100%;
+  max-width:420px;
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:30px;
+  box-shadow:0 15px 50px rgba(15,23,42,.1);
+}
+
+.loginLogo{
+  width:60px;
+  height:60px;
+  background:#2563eb;
+  color:white;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  margin:auto;
+}
+
+.loginBox h2{
+  text-align:center;
+  margin-top:15px;
+}
+
+.loginBox p{
+  text-align:center;
+  color:#6b7280;
+  font-size:12px;
+  margin:6px 0 25px;
+}
+
+.loginBtn{
+  width:100%;
+  height:45px;
+  background:#2563eb;
+  color:white;
+  border-radius:9px;
+  font-weight:700;
+}
+
+.error{
+  color:#dc2626;
+  font-size:12px;
+  margin-top:10px;
+  display:none;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.5);
+  z-index:500;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalBox{
+  background:white;
+  width:100%;
+  max-width:500px;
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.modalHeader{
+  padding:16px 18px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modalHeader h3{
+  font-size:16px;
+}
+
+.close{
+  background:#f3f4f6;
+  width:32px;
+  height:32px;
+  border-radius:8px;
+}
+
+.modalBody{
+  padding:20px;
+}
+
+.modalFooter{
+  padding:15px 20px;
+  border-top:1px solid #eee;
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .grid2{
+    grid-template-columns:1fr;
+  }
+
+  .settingsGrid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:750px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+  }
+
+  .mobileMenu{
+    display:block;
+    margin-right:12px;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .pageTitle h1{
+    font-size:17px;
+  }
+
+  .statusOnline{
+    display:none;
+  }
+
+  .content{
+    padding:15px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .stat{
+    padding:14px;
+  }
+
+  .statValue{
+    font-size:21px;
+  }
+
+  .reportGrid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:480px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .topActions .iconBtn{
+    display:none;
+  }
+
+  .loginBox{
+    padding:22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div class="loginScreen" id="loginScreen">
+
+  <div class="loginBox">
+
+    <div class="loginLogo">👑</div>
+
+    <h2>Main Admin</h2>
+
+    <p>Secure LocalStore Administration</p>
+
+    <div class="formGroup">
+      <label>Admin Mobile</label>
+      <input
+        id="loginMobile"
+        type="tel"
+        maxlength="10"
+        placeholder="Enter admin mobile"
+      >
+    </div>
+
+    <div class="formGroup">
+      <label>Password</label>
+      <input
+        id="loginPassword"
+        type="password"
+        placeholder="Enter password"
+      >
+    </div>
+
+    <button
+      class="loginBtn"
+      onclick="adminLogin()"
+    >
+      Login to Admin Panel
+    </button>
+
+    <div class="error" id="loginError"></div>
+
+  </div>
+
+</div>
+
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+
+    <div class="logoIcon">LS</div>
+
+    <div class="logoText">
+      <strong>LocalStore</strong>
+      <span>Main Administration</span>
+    </div>
+
+  </div>
+
+  <div class="navTitle">Overview</div>
+
+  <button class="navBtn active" onclick="showPage('dashboard',this)">
+    <span class="navIcon">📊</span>
+    Dashboard
+  </button>
+
+  <div class="navTitle">Management</div>
+
+  <button class="navBtn" onclick="showPage('stores',this)">
+    <span class="navIcon">🏪</span>
+    Stores
+  </button>
+
+  <button class="navBtn" onclick="showPage('customers',this)">
+    <span class="navIcon">👥</span>
+    Customers
+  </button>
+
+  <button class="navBtn" onclick="showPage('orders',this)">
+    <span class="navIcon">🛒</span>
+    Orders
+  </button>
+
+  <button class="navBtn" onclick="showPage('payments',this)">
+    <span class="navIcon">💳</span>
+    Payments
+  </button>
+
+  <button class="navBtn" onclick="showPage('rent',this)">
+    <span class="navIcon">📅</span>
+    Rent
+  </button>
+
+  <div class="navTitle">Finance</div>
+
+  <button class="navBtn" onclick="showPage('commission',this)">
+    <span class="navIcon">💰</span>
+    Commission
+  </button>
+
+  <button class="navBtn" onclick="showPage('reports',this)">
+    <span class="navIcon">📈</span>
+    Reports
+  </button>
+
+  <div class="navTitle">System</div>
+
+  <button class="navBtn" onclick="showPage('settings',this)">
+    <span class="navIcon">⚙️</span>
+    Settings
+  </button>
+
+  <div class="sidebarBottom">
+
+    <div class="adminMini">
+
+      <div class="avatar">A</div>
+
+      <div>
+        <strong id="adminName">Main Admin</strong>
+        <small>SUPER ADMIN</small>
+      </div>
+
+    </div>
+
+    <button
+      class="navBtn"
+      onclick="logout()"
+      style="color:#fca5a5"
+    >
+      <span class="navIcon">🚪</span>
+      Logout
+    </button>
+
+  </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+<header class="topbar">
+
+  <div style="display:flex;align-items:center">
+
+    <button
+      class="mobileMenu"
+      onclick="toggleSidebar()"
+    >
+      ☰
+    </button>
+
+    <div class="pageTitle">
+
+      <h1 id="pageHeading">
+        Dashboard
+      </h1>
+
+      <p id="pageSubheading">
+        LocalStore main administration
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="topActions">
+
+    <div class="statusOnline">
+      <span class="dot"></span>
+      Backend Online
+    </div>
+
+    <button
+      class="iconBtn"
+      onclick="refreshCurrentPage()"
+    >
+      ↻
+    </button>
+
+  </div>
+
+</header>
+
+
+<section class="content">
+
+
+<!-- DASHBOARD -->
+
+<div class="page active" id="page-dashboard">
+
+  <div class="sectionHead">
+
+    <div>
+      <h2>Dashboard Overview</h2>
+      <p>Complete system statistics</p>
+    </div>
+
+    <button
+      class="actionBtn primary"
+      onclick="loadDashboard()"
+    >
+      Refresh
+    </button>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="statTop">
+        <span class="statLabel">Total Stores</span>
+        <div class="statIcon">🏪</div>
+      </div>
+      <div class="statValue" id="totalStores">0</div>
+      <div class="statBottom">Registered stores</div>
+    </div>
+
+    <div class="stat">
+      <div class="statTop">
+        <span class="statLabel">Customers</span>
+        <div class="statIcon">👥</div>
+      </div>
+      <div class="statValue" id="totalCustomers">0</div>
+      <div class="statBottom">Registered customers</div>
+    </div>
+
+    <div class="stat">
+      <div class="statTop">
+        <span class="statLabel">Orders</span>
+        <div class="statIcon">🛒</div>
+      </div>
+      <div class="statValue" id="totalOrders">0</div>
+      <div class="statBottom">All orders</div>
+    </div>
+
+    <div class="stat">
+      <div class="statTop">
+        <span class="statLabel">Total Sales</span>
+        <div class="statIcon">₹</div>
+      </div>
+      <div class="statValue" id="totalSales">₹0</div>
+      <div class="statBottom">Non-cancelled sales</div>
+    </div>
+
+  </div>
+
+
+  <div class="reportGrid">
+
+    <div class="reportBox">
+      <small>Cash / COD Sales</small>
+      <strong id="cashSales">₹0</strong>
+    </div>
+
+    <div class="reportBox">
+      <small>UPI / Online Sales</small>
+      <strong id="upiSales">₹0</strong>
+    </div>
+
+    <div class="reportBox">
+      <small>Commission</small>
+      <strong id="commission">₹0</strong>
+    </div>
+
+  </div>
+
+
+  <div style="height:18px"></div>
+
+
+  <div class="card">
+
+    <div class="cardHeader">
+      <h3>System Information</h3>
+      <span class="badge green">ACTIVE</span>
+    </div>
+
+    <div class="cardBody">
+
+      <div class="reportGrid">
+
+        <div>
+          <small>Backend</small>
+          <strong style="font-size:15px">
+            Node.js / Express
+          </strong>
+        </div>
+
+        <div>
+          <small>Database</small>
+          <strong style="font-size:15px">
+            SQLite
+          </strong>
+        </div>
+
+        <div>
+          <small>Authentication</small>
+          <strong style="font-size:15px">
+            JWT
+          </strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- STORES -->
+
+<div class="page" id="page-stores">
+
+  <div class="sectionHead">
+    <div>
+      <h2>Store Management</h2>
+      <p>Approve, block and monitor stores</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+
+    <div class="search">
+      <span>🔎</span>
+      <input
+        id="storeSearch"
+        placeholder="Search store..."
+        oninput="filterStores()"
+      >
+    </div>
+
+    <select
+      class="select"
+      id="storeStatusFilter"
+      onchange="filterStores()"
+    >
+      <option value="">All Status</option>
+      <option value="PENDING">Pending</option>
+      <option value="APPROVED">Approved</option>
+      <option value="BLOCKED">Blocked</option>
+    </select>
+
+  </div>
+
+  <div class="card">
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>STORE</th>
+            <th>OWNER</th>
+            <th>MOBILE</th>
+            <th>STATUS</th>
+            <th>SALES</th>
+            <th>RENT EXPIRY</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+
+        <tbody id="storesTable">
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CUSTOMERS -->
+
+<div class="page" id="page-customers">
+
+  <div class="sectionHead">
+    <div>
+      <h2>Customer Management</h2>
+      <p>Manage registered customers</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+
+    <div class="search">
+      <span>🔎</span>
+      <input
+        id="customerSearch"
+        placeholder="Search customer..."
+        oninput="filterCustomers()"
+      >
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>NAME</th>
+            <th>MOBILE</th>
+            <th>ORDERS</th>
+            <th>TOTAL SPENT</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+
+        <tbody id="customersTable">
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ORDERS -->
+
+<div class="page" id="page-orders">
+
+  <div class="sectionHead">
+    <div>
+      <h2>All Orders</h2>
+      <p>View all customer and store orders</p>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ORDER</th>
+            <th>STORE</th>
+            <th>CUSTOMER</th>
+            <th>PAYMENT</th>
+            <th>AMOUNT</th>
+            <th>PAY STATUS</th>
+            <th>ORDER STATUS</th>
+            <th>DATE</th>
+          </tr>
+        </thead>
+
+        <tbody id="ordersTable">
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- PAYMENTS -->
+
+<div class="page" id="page-payments">
+
+  <div class="sectionHead">
+    <div>
+      <h2>Payment Management</h2>
+      <p>Monitor payment records</p>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ORDER</th>
+            <th>CUSTOMER</th>
+            <th>STORE</th>
+            <th>METHOD</th>
+            <th>AMOUNT</th>
+            <th>UTR</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+
+        <tbody id="paymentsTable">
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- RENT -->
+
+<div class="page" id="page-rent">
+
+  <div class="sectionHead">
+
+    <div>
+      <h2>Store Rent</h2>
+      <p>Manage store subscription and expiry</p>
+    </div>
+
+    <button
+      class="actionBtn primary"
+      onclick="openRentModal()"
+    >
+      + Update Rent
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>STORE</th>
+            <th>RENT</th>
+            <th>EXPIRY</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+
+        <tbody id="rentTable">
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- COMMISSION -->
+
+<div class="page" id="page-commission">
+
+  <div class="sectionHead">
+    <div>
+      <h2>Commission</h2>
+      <p>Store-wise commission report</p>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>STORE</th>
+            <th>RATE</th>
+            <th>TOTAL SALES</th>
+            <th>COMMISSION</th>
+          </tr>
+        </thead>
+
+        <tbody id="commissionTable">
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- REPORTS -->
+
+<div class="page" id="page-reports">
+
+  <div class="sectionHead">
+    <div>
+      <h2>Reports</h2>
+      <p>System sales reports</p>
+    </div>
+  </div>
+
+  <div class="reportGrid">
+
+    <div class="reportBox">
+      <small>Today's Sales</small>
+      <strong id="todaySales">₹0</strong>
+    </div>
+
+    <div class="reportBox">
+      <small>This Month</small>
+      <strong id="monthSales">₹0</strong>
+    </div>
+
+    <div class="reportBox">
+      <small>All Time Sales</small>
+      <strong id="allSales">₹0</strong>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- SETTINGS -->
+
+<div class="page" id="page-settings">
+
+  <div class="sectionHead">
+    <div>
+      <h2>System Settings</h2>
+      <p>Configure LocalStore platform</p>
+    </div>
+  </div>
+
+  <div class="settingsGrid">
+
+    <div class="card">
+
+      <div class="cardHeader">
+        <h3>Payment Settings</h3>
+      </div>
+
+      <div class="cardBody">
+
+        <div class="formGroup">
+          <label>Admin UPI ID</label>
+          <input
+            id="adminUpi"
+            placeholder="admin@upi"
+          >
+        </div>
+
+        <div class="formGroup">
+          <label>Commission Rate (%)</label>
+          <input
+            id="commissionRate"
+            type="number"
+            min="0"
+            max="100"
+          >
+        </div>
+
+        <div class="formGroup">
+          <label>Default Store Rent</label>
+          <input
+            id="defaultRent"
+            type="number"
+            min="0"
+          >
+        </div>
+
+        <button
+          class="actionBtn primary"
+          onclick="saveSettings()"
+        >
+          Save Settings
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="cardHeader">
+        <h3>Security</h3>
+      </div>
+
+      <div class="cardBody">
+
+        <div class="formGroup">
+          <label>Current Admin</label>
+          <input
+            id="securityAdmin"
+            disabled
+          >
+        </div>
+
+        <div class="formGroup">
+          <label>Role</label>
+          <input
+            value="SUPER_ADMIN"
+            disabled
+          >
+        </div>
+
+        <div>
+          <span class="badge green">
+            JWT Authentication Enabled
+          </span>
+        </div>
+
+        <div style="height:15px"></div>
+
+        <div>
+          <span class="badge green">
+            bcrypt Password Hashing Enabled
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+</section>
+</main>
+</div>
+
+
+<!-- RENT MODAL -->
+
+<div class="modal" id="rentModal">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+
+      <h3>Update Store Rent</h3>
+
+      <button
+        class="close"
+        onclick="closeModal('rentModal')"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="modalBody">
+
+      <div class="formGroup">
+        <label>Store ID</label>
+        <input
+          id="rentStoreId"
+          placeholder="STORE001"
+        >
+      </div>
+
+      <div class="formGroup">
+        <label>Rent Amount</label>
+        <input
+          id="rentAmount"
+          type="number"
+          placeholder="500"
+        >
+      </div>
+
+      <div class="formGroup">
+        <label>Days</label>
+        <input
+          id="rentDays"
+          type="number"
+          value="30"
+          min="1"
+        >
+      </div>
+
+    </div>
+
+    <div class="modalFooter">
+
+      <button
+        class="actionBtn secondary"
+        onclick="closeModal('rentModal')"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="actionBtn primary"
+        onclick="updateRent()"
+      >
+        Save Rent
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const API_URL = "https://my-backend-1.onrender.com";
+const API_BASE = "https://my-backend-1.onrender.com/api";
+ 
+  
+
+
+let token =
+  localStorage.getItem("mainAdminToken") || "";
+
+let storesData = [];
+let customersData = [];
+
+let currentPage = "dashboard";
+
+
+/* =====================================================
+   API HELPER
+===================================================== */
+
+async function api(path, options = {}){
+
+  const headers = {
+    ...(options.headers || {})
+  };
+
+  if(token){
+    headers.Authorization =
+      "Bearer " + token;
+  }
+
+  if(
+    options.body &&
+    !(options.body instanceof FormData)
+  ){
+    headers["Content-Type"] =
+      "application/json";
+  }
+
+  const response =
+    await fetch(
+      API + path,
+      {
+        ...options,
+        headers
+      }
+    );
+
+  let data = {};
+
+  try{
+    data = await response.json();
+  }catch{}
+
+  if(!response.ok){
+
+    if(response.status === 401){
+      logout();
+    }
+
+    throw new Error(
+      data.error ||
+      "Request failed"
+    );
+  }
+
+  return data;
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function adminLogin(){
+
+  const mobile =
+    document.getElementById(
+      "loginMobile"
+    ).value.trim();
+
+  const password =
+    document.getElementById(
+      "loginPassword"
+    ).value;
+
+  const error =
+    document.getElementById(
+      "loginError"
+    );
+
+  error.style.display =
+    "none";
+
+  if(!/^\d{10}$/.test(mobile)){
+    showLoginError(
+      "Enter valid 10 digit mobile number"
+    );
+    return;
+  }
+
+  if(!password){
+    showLoginError(
+      "Enter password"
+    );
+    return;
+  }
+
+  try{
+
+    const data =
+      await fetch(
+        API + "/main-admin/login",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+          body:JSON.stringify({
+            mobile,
+            password
+          })
+        }
+      ).then(async r => {
+
+        const d =
+          await r.json();
+
+        if(!r.ok){
+          throw new Error(
+            d.error ||
+            "Login failed"
+          );
+        }
+
+        return d;
+
+      });
+
+    token =
+      data.token;
+
+    localStorage.setItem(
+      "mainAdminToken",
+      token
+    );
+
+    localStorage.setItem(
+      "mainAdmin",
+      JSON.stringify(data.admin)
+    );
+
+    document.getElementById(
+      "loginScreen"
+    ).style.display =
+      "none";
+
+    setAdminInfo(
+      data.admin
+    );
+
+    loadDashboard();
+
+  }catch(error){
+
+    showLoginError(
+      error.message
+    );
+
+  }
+}
+
+
+function showLoginError(message){
+
+  const error =
+    document.getElementById(
+      "loginError"
+    );
+
+  error.textContent =
+    message;
+
+  error.style.display =
+    "block";
+}
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+window.addEventListener(
+  "load",
+  () => {
+
+    const saved =
+      localStorage.getItem(
+        "mainAdmin"
+      );
+
+    if(token && saved){
+
+      try{
+
+        const admin =
+          JSON.parse(saved);
+
+        document.getElementById(
+          "loginScreen"
+        ).style.display =
+          "none";
+
+        setAdminInfo(admin);
+
+        loadDashboard();
+
+      }catch{
+
+        logout();
+
+      }
+
+    }
+
+  }
+);
+
+
+function setAdminInfo(admin){
+
+  document.getElementById(
+    "adminName"
+  ).textContent =
+    admin.name ||
+    "Main Admin";
+
+  document.getElementById(
+    "securityAdmin"
+  ).value =
+    admin.mobile || "";
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showPage(name, button){
+
+  currentPage =
+    name;
+
+  document
+    .querySelectorAll(".page")
+    .forEach(p =>
+      p.classList.remove(
+        "active"
+      )
+    );
+
+  const page =
+    document.getElementById(
+      "page-" + name
+    );
+
+  if(page){
+    page.classList.add(
+      "active"
+    );
+  }
+
+  document
+    .querySelectorAll(".navBtn")
+    .forEach(b =>
+      b.classList.remove(
+        "active"
+      )
+    );
+
+  if(button){
+    button.classList.add(
+      "active"
+    );
+  }
+
+  const titles = {
+
+    dashboard:[
+      "Dashboard",
+      "LocalStore main administration"
+    ],
+
+    stores:[
+      "Stores",
+      "Store management"
+    ],
+
+    customers:[
+      "Customers",
+      "Customer management"
+    ],
+
+    orders:[
+      "Orders",
+      "All system orders"
+    ],
+
+    payments:[
+      "Payments",
+      "Payment management"
+    ],
+
+    rent:[
+      "Rent",
+      "Store rent management"
+    ],
+
+    commission:[
+      "Commission",
+      "Commission reports"
+    ],
+
+    reports:[
+      "Reports",
+      "Sales and income reports"
+    ],
+
+    settings:[
+      "Settings",
+      "System configuration"
+    ]
+
+  };
+
+  if(titles[name]){
+
+    document.getElementById(
+      "pageHeading"
+    ).textContent =
+      titles[name][0];
+
+    document.getElementById(
+      "pageSubheading"
+    ).textContent =
+      titles[name][1];
+
+  }
+
+  document
+    .getElementById(
+      "sidebar"
+    )
+    .classList.remove(
+      "open"
+    );
+
+
+  if(name === "dashboard")
+    loadDashboard();
+
+  if(name === "stores")
+    loadStores();
+
+  if(name === "customers")
+    loadCustomers();
+
+  if(name === "orders")
+    loadOrders();
+
+  if(name === "payments")
+    loadPayments();
+
+  if(name === "rent")
+    loadRent();
+
+  if(name === "commission")
+    loadCommission();
+
+  if(name === "reports")
+    loadReports();
+
+  if(name === "settings")
+    loadSettings();
+
+}
+
+
+function toggleSidebar(){
+
+  document
+    .getElementById(
+      "sidebar"
+    )
+    .classList.toggle(
+      "open"
+    );
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+async function loadDashboard(){
+
+  try{
+
+    const data =
+      await api(
+        "/main-admin/dashboard"
+      );
+
+    document.getElementById(
+      "totalStores"
+    ).textContent =
+      data.totalStores ?? 0;
+
+    document.getElementById(
+      "totalCustomers"
+    ).textContent =
+      data.totalCustomers ?? 0;
+
+    document.getElementById(
+      "totalOrders"
+    ).textContent =
+      data.totalOrders ?? 0;
+
+    document.getElementById(
+      "totalSales"
+    ).textContent =
+      money(data.totalSales);
+
+    document.getElementById(
+      "cashSales"
+    ).textContent =
+      money(data.cashSales);
+
+    document.getElementById(
+      "upiSales"
+    ).textContent =
+      money(data.upiSales);
+
+    document.getElementById(
+      "commission"
+    ).textContent =
+      money(data.commission);
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =====================================================
+   STORES
+===================================================== */
+
+async function loadStores(){
+
+  try{
+
+    const data =
+      await api(
+        "/main-admin/stores"
+      );
+
+    storesData =
+      data.stores || [];
+
+    renderStores(
+      storesData
+    );
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+function renderStores(rows){
+
+  const table =
+    document.getElementById(
+      "storesTable"
+    );
+
+  if(!rows.length){
+
+    table.innerHTML = `
+      <tr>
+        <td colspan="7"
+            style="text-align:center">
+          No stores found
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  table.innerHTML =
+    rows.map(store => {
+
+      const status =
+        store.status;
+
+      let badge =
+        "yellow";
+
+      if(status === "APPROVED")
+        badge = "green";
+
+      if(status === "BLOCKED")
+        badge = "red";
+
+      return `
+
+      <tr>
+
+        <td>
+          <div class="storeCell">
+
+            <div class="storeAvatar">
+              ${escapeHtml(
+                String(
+                  store.store_name ||
+                  "S"
+                ).charAt(0)
+              )}
+            </div>
+
+            <div>
+              <strong>
+                ${escapeHtml(
+                  store.store_name
+                )}
+              </strong>
+
+              <div style="font-size:10px;color:#6b7280">
+                ${escapeHtml(
+                  store.store_id
+                )}
+              </div>
+            </div>
+
+          </div>
+        </td>
+
+        <td>
+          ${escapeHtml(
+            store.owner_name || "-"
+          )}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            store.mobile || "-"
+          )}
+        </td>
+
+        <td>
+          <span class="badge ${badge}">
+            ${escapeHtml(status)}
+          </span>
+        </td>
+
+        <td>
+          ₹${Number(
+            store.total_sales || 0
+          ).toFixed(2)}
+        </td>
+
+        <td>
+          ${store.rent_expiry || "-"}
+        </td>
+
+        <td>
+
+          ${
+            status !== "APPROVED"
+            ? `
+              <button
+                class="actionBtn success"
+                onclick="changeStoreStatus(
+                  '${encodeURIComponent(store.store_id)}',
+                  'APPROVED'
+                )"
+              >
+                Approve
+              </button>
+            `
+            : ""
+          }
+
+          ${
+            status !== "BLOCKED"
+            ? `
+              <button
+                class="actionBtn danger"
+                onclick="changeStoreStatus(
+                  '${encodeURIComponent(store.store_id)}',
+                  'BLOCKED'
+                )"
+              >
+                Block
+              </button>
+            `
+            : ""
+          }
+
+        </td>
+
+      </tr>
+
+      `;
+
+    }).join("");
+
+}
+
+
+function filterStores(){
+
+  const q =
+    document.getElementById(
+      "storeSearch"
+    ).value
+    .toLowerCase();
+
+  const status =
+    document.getElementById(
+      "storeStatusFilter"
+    ).value;
+
+  const filtered =
+    storesData.filter(s => {
+
+      const matchText =
+        (
+          s.store_name +
+          " " +
+          s.store_id +
+          " " +
+          s.mobile +
+          " " +
+          s.owner_name
+        )
+        .toLowerCase()
+        .includes(q);
+
+      const matchStatus =
+        !status ||
+        s.status === status;
+
+      return (
+        matchText &&
+        matchStatus
+      );
+
+    });
+
+  renderStores(
+    filtered
+  );
+
+}
+
+
+async function changeStoreStatus(
+  storeId,
+  status
+){
+
+  storeId =
+    decodeURIComponent(
+      storeId
+    );
+
+  const text =
+    status === "BLOCKED"
+      ? "Block this store?"
+      : "Approve this store?";
+
+  if(!confirm(text))
+    return;
+
+  try{
+
+    await api(
+      "/main-admin/store/" +
+      encodeURIComponent(storeId) +
+      "/status",
+      {
+        method:"POST",
+        body:JSON.stringify({
+          status
+        })
+      }
+    );
+
+    await loadStores();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/* =====================================================
+   CUSTOMERS
+===================================================== */
+
+async function loadCustomers(){
+
+  try{
+
+    const data =
+      await api(
+        "/main-admin/customers"
+      );
+
+    customersData =
+      data.customers || [];
+
+    renderCustomers(
+      customersData
+    );
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+function renderCustomers(rows){
+
+  const table =
+    document.getElementById(
+      "customersTable"
+    );
+
+  table.innerHTML =
+    rows.length
+      ? rows.map(c => `
+
+        <tr>
+
+          <td>
+            <strong>
+              ${escapeHtml(c.name)}
+            </strong>
+          </td>
+
+          <td>
+            ${escapeHtml(c.mobile)}
+          </td>
+
+          <td>
+            ${c.orders || 0}
+          </td>
+
+          <td>
+            ₹${Number(
+              c.total_spent || 0
+            ).toFixed(2)}
+          </td>
+
+          <td>
+
+            ${
+              c.blocked
+              ? `<span class="badge red">
+                   BLOCKED
+                 </span>`
+              : `<span class="badge green">
+                   ACTIVE
+                 </span>`
+            }
+
+          </td>
+
+          <td>
+
+            <button
+              class="actionBtn ${
+                c.blocked
+                  ? "success"
+                  : "danger"
+              }"
+              onclick="changeCustomerStatus(
+                ${c.id},
+                ${c.blocked ? 0 : 1}
+              )"
+            >
+              ${
+                c.blocked
+                  ? "Unblock"
+                  : "Block"
+              }
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join("")
+      :
+      `
+      <tr>
+        <td colspan="6"
+            style="text-align:center">
+          No customers found
+        </td>
+      </tr>
+      `;
+
+}
+
+
+function filterCustomers(){
+
+  const q =
+    document.getElementById(
+      "customerSearch"
+    ).value
+    .toLowerCase();
+
+  renderCustomers(
+    customersData.filter(c =>
+      (
+        c.name +
+        " " +
+        c.mobile
+      )
+      .toLowerCase()
+      .includes(q)
+    )
+  );
+
+}
+
+
+async function changeCustomerStatus(
+  id,
+  blocked
+){
+
+  try{
+
+    await api(
+      "/main-admin/customer/" +
+      id +
+      "/status",
+      {
+        method:"POST",
+        body:JSON.stringify({
+          blocked:!!blocked
+        })
+      }
+    );
+
+    await loadCustomers();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/* =====================================================
+   ORDERS
+===================================================== */
+
+async function loadOrders(){
+
+  try{
+
+    const data =
+      await api(
+        "/main-admin/orders"
+      );
+
+    const table =
+      document.getElementById(
+        "ordersTable"
+      );
+
+    table.innerHTML =
+      (data.orders || []).map(o => `
+
+      <tr>
+
+        <td>
+          <strong>
+            ${escapeHtml(o.order_no)}
+          </strong>
+        </td>
+
+        <td>
+          ${escapeHtml(
+            o.store_name || "-"
+          )}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            o.customer_name || "-"
+          )}
+          <div style="font-size:10px;color:#6b7280">
+            ${escapeHtml(
+              o.customer_mobile || ""
+            )}
+          </div>
+        </td>
+
+        <td>
+          ${escapeHtml(
+            o.payment_method
+          )}
+        </td>
+
+        <td>
+          ₹${Number(
+            o.total || 0
+          ).toFixed(2)}
+        </td>
+
+        <td>
+          <span class="badge ${
+            o.payment_status === "VERIFIED"
+              ? "green"
+              : "yellow"
+          }">
+            ${escapeHtml(
+              o.payment_status
+            )}
+          </span>
+        </td>
+
+        <td>
+          <span class="badge ${
+            o.status === "CANCELLED"
+              ? "red"
+              : o.status === "APPROVED"
+                ? "green"
+                : "yellow"
+          }">
+            ${escapeHtml(
+              o.status
+            )}
+          </span>
+        </td>
+
+        <td>
+          ${escapeHtml(
+            o.created_at || "-"
+          )}
+        </td>
+
+      </tr>
+
+      `).join("");
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/* =====================================================
+   PAYMENTS
+===================================================== */
+
+async function loadPayments(){
+
+  try{
+
+    const data =
+      await api(
+        "/main-admin/payments"
+      );
+
+    const table =
+      document.getElementById(
+        "paymentsTable"
+      );
+
+    table.innerHTML =
+      (data.payments || []).map(p => `
+
+      <tr>
+
+        <td>
+          ${escapeHtml(p.order_no)}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            p.customer_name || "-"
+          )}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            p.store_name || "-"
+          )}
+        </td>
+
+        <td>
+          ${escapeHtml(p.method)}
+        </td>
+
+        <td>
+          ₹${Number(
+            p.amount || 0
+          ).toFixed(2)}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            p.utr || "-"
+          )}
+        </td>
+
+        <td>
+          <span class="badge ${
+            p.status === "VERIFIED"
+              ? "green"
+              : p.status === "REJECTED"
+                ? "red"
+                : "yellow"
+          }">
+            ${escapeHtml(p.status)}
+          </span>
+        </td>
+
+        <td>
+
+          ${
+            p.status === "PENDING"
+            ? `
+
+              <button
+                class="actionBtn success"
+                onclick="verifyPayment(
+                  ${p.id},
+                  'VERIFIED'
+                )"
+              >
+                Verify
+              </button>
+
+              <button
+                class="actionBtn danger"
+                onclick="verifyPayment(
+                  ${p.id},
+                  'REJECTED'
+                )"
+              >
+                Reject
+              </button>
+
+            `
+            : "-"
+          }
+
+        </td>
+
+      </tr>
+
+      `).join("");
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+async function verifyPayment(
+  id,
+  status
+){
+
+  if(!confirm(
+    status === "VERIFIED"
+      ? "Verify payment?"
+      : "Reject payment?"
+  ))
+    return;
+
+  try{
+
+    await api(
+      "/main-admin/payment/" +
+      id +
+      "/status",
+      {
+        method:"POST",
+        body:JSON.stringify({
+          status
+        })
+      }
+    );
+
+    await loadPayments();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/* =====================================================
+   RENT
+===================================================== */
+
+async function loadRent(){
+
+  try{
+
+    const data =
+      await api(
+        "/main-admin/rent"
+      );
+
+    const table =
+      document.getElementById(
+        "rentTable"
+      );
+
+    table.innerHTML =
+      (data.rents || []).map(r => {
+
+        let cls =
+          r.status === "EXPIRED"
+            ? "red"
+            : r.status === "PAID"
+              ? "green"
+              : "yellow";
+
+        return `
+
+        <tr>
+
+          <td>
+            <strong>
+              ${escapeHtml(
+                r.store_name
+              )}
+            </strong>
+
+            <div style="font-size:10px;color:#6b7280">
+              ${escapeHtml(
+                r.store_id
+              )}
+            </div>
+          </td>
+
+          <td>
+            ₹${Number(
+              r.rent_amount || 0
+            ).toFixed(2)}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              r.rent_expiry || "-"
+            )}
+          </td>
+
+          <td>
+            <span class="badge ${cls}">
+              ${escapeHtml(
+                r.status
+              )}
+            </span>
+          </td>
+
+        </tr>
+
+        `;
+
+      }).join("");
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+function openRentModal(){
+
+  document
+    .getElementById(
+      "rentModal"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+async function updateRent(){
+
+  const storeId =
+    document.getElementById(
+      "rentStoreId"
+    ).value.trim();
+
+  const amount =
+    Number(
+      document.getElementById(
+        "rentAmount"
+      ).value
+    );
+
+  const days =
+    Number(
+      document.getElementById(
+        "rentDays"
+      ).value
+    );
+
+  if(!storeId ||
+     !Number.isFinite(amount) ||
+     amount < 0 ||
+     !Number.isFinite(days) ||
+     days < 1){
+
+    alert(
+      "Enter valid rent details"
+    );
+
+    return;
+
+  }
+
+  try{
+
+    await api(
+      "/main-admin/rent",
+      {
+        method:"POST",
+        body:JSON.stringify({
+          storeId,
+          amount,
+          days
+        })
+      }
+    );
+
+    closeModal(
+      "rentModal"
+    );
+
+    await loadRent();
+
+    alert(
+      "Rent updated successfully"
+    );
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/* =====================================================
+   COMMISSION
+===================================================== */
+
+async function loadCommission(){
+
+  try{
+
+    const data =
+      await api(
+        "/main-admin/commission"
+      );
+
+    const table =
+      document.getElementById(
+        "commissionTable"
+      );
+
+    table.innerHTML =
+      (data.commission || []).map(c => `
+
+      <tr>
+
+        <td>
+          <strong>
+            ${escapeHtml(
+              c.store_name
+            )}
+          </strong>
+
+          <div style="font-size:10px;color:#6b7280">
+            ${escapeHtml(
+              c.store_id
+            )}
+          </div>
+        </td>
+
+        <td>
+          ${Number(
+            c.commission_rate || 0
+          ).toFixed(2)}%
+        </td>
+
+        <td>
+          ₹${Number(
+            c.total_sales || 0
+          ).toFixed(2)}
+        </td>
+
+        <td>
+          <strong>
+            ₹${Number(
+              c.commission || 0
+            ).toFixed(2)}
+          </strong>
+        </td>
+
+      </tr>
+
+      `).join("");
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/* =====================================================
+   REPORTS
+===================================================== */
+
+async function loadReports(){
+
+  try{
+
+    const data =
+      await api(
+        "/main-admin/reports"
+      );
+
+    document.getElementById(
+      "todaySales"
+    ).textContent =
+      money(data.today);
+
+    document.getElementById(
+      "monthSales"
+    ).textContent =
+      money(data.month);
+
+    document.getElementById(
+      "allSales"
+    ).textContent =
+      money(data.totalSales);
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+async function loadSettings(){
+
+  try{
+
+    const data =
+      await api(
+        "/main-admin/settings"
+      );
+
+    const s =
+      data.settings || {};
+
+    document.getElementById(
+      "adminUpi"
+    ).value =
+      s.admin_upi || "";
+
+    document.getElementById(
+      "commissionRate"
+    ).value =
+      s.commission_rate ?? 2;
+
+    document.getElementById(
+      "defaultRent"
+    ).value =
+      s.default_rent ?? 500;
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+async function saveSettings(){
+
+  const admin_upi =
+    document.getElementById(
+      "adminUpi"
+    ).value.trim();
+
+  const commission_rate =
+    Number(
+      document.getElementById(
+        "commissionRate"
+      ).value
+    );
+
+  const default_rent =
+    Number(
+      document.getElementById(
+        "defaultRent"
+      ).value
+    );
+
+  if(
+    !Number.isFinite(
+      commission_rate
+    ) ||
+    commission_rate < 0 ||
+    commission_rate > 100
+  ){
+
+    alert(
+      "Commission must be between 0 and 100"
+    );
+
+    return;
+
+  }
+
+  if(
+    !Number.isFinite(
+      default_rent
+    ) ||
+    default_rent < 0
+  ){
+
+    alert(
+      "Invalid rent amount"
+    );
+
+    return;
+
+  }
+
+  try{
+
+    await api(
+      "/main-admin/settings",
+      {
+        method:"PUT",
+        body:JSON.stringify({
+          admin_upi,
+          commission_rate,
+          default_rent
+        })
+      }
+    );
+
+    alert(
+      "Settings saved successfully"
+    );
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function closeModal(id){
+
+  document
+    .getElementById(id)
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+function refreshCurrentPage(){
+
+  showPage(
+    currentPage,
+    document.querySelector(
+      ".navBtn.active"
+    )
+  );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+  token = "";
+
+  localStorage.removeItem(
+    "mainAdminToken"
+  );
+
+  localStorage.removeItem(
+    "mainAdmin"
+  );
+
+  location.reload();
+
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function money(value){
+
+  const n =
+    Number(value || 0);
+
+  return "₹" +
+    n.toLocaleString(
+      "en-IN",
+      {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+      }
+    );
+
+}
+
+
+function escapeHtml(value){
+
+  return String(
+    value ?? ""
+  )
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
